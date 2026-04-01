@@ -1,0 +1,7 @@
+#image_release_preview {
+    width: 150px;   /* or any value you want */
+    height: 150px;
+    object-fit: cover;  /* makes the image fill the area without distortion */
+    border-radius: 50%; /* makes it circular */
+    border: 2px solid #007bff; /* optional border */
+}
