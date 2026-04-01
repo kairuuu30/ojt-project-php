@@ -120,7 +120,7 @@ include("../auth/session.php");
                                         </div>
                                         <div class="row mb-3">
                                             <label for="course_code" class="form-label">Course Code</label>
-                                            <input type="text" style="text-transform: uppercase;" name="course_code" class="form-control" id="course_code" placeholder="Code of the Course" required>
+                                            <input type="text" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase()" name="course_code" class="form-control" id="course_code" placeholder="Code of the Course" required>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="college_code" class="form-label">College Code</label>
@@ -168,7 +168,7 @@ include("../auth/session.php");
                                         </div>
                                         <div class="row mb-3">
                                             <label for="Course_code" class="form-label">Course Code</label>
-                                            <input type="text" style="text-transform: uppercase;" id='update_course_code' name="course_code" class="form-control" required>
+                                            <input type="text" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase()" id='update_course_code' name="course_code" class="form-control" required>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="college_code" class="form-label">College Code</label>

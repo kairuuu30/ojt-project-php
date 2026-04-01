@@ -27,7 +27,7 @@ if (isset($_POST['login'])) {
         echo json_encode([
             'status' => 'success',
             'message' => 'Login Success!',
-            'redirect' => '../student/list.php'
+            'redirect' => '../student/student_list.php'
         ]);
     } 
 }

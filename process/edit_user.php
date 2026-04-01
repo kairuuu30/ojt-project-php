@@ -17,7 +17,7 @@ $current_query = "SELECT * FROM students WHERE id = $id";
 $current_run = mysqli_query($conn, $current_query);
 $current_data = mysqli_fetch_assoc($current_run);
 
-$validate_query = "SELECT * FROM students WHERE LOWER(tup_id)='$lowercase_tup_id' AND deleted_at IS NULL";
+$validate_query = "SELECT * FROM students WHERE id != '$id' AND LOWER(tup_id)='$lowercase_tup_id' AND deleted_at IS NULL";
 $validate_query_run = mysqli_query($conn, $validate_query);
 
 if ($current_data['name'] == $name &&

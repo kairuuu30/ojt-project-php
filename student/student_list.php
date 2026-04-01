@@ -131,7 +131,7 @@ include("../auth/session.php");
                                             </div>
                                             <div class="col-md-5">
                                                 <label for="tup_id" class="form-label">TUP ID</label>
-                                                <input type="text" name="tup_id" class="form-control" id="tup_id" placeholder="(ex. TUPM-22-1234)" required>
+                                                <input type="text" name="tup_id" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase()" class="form-control" id="tup_id" placeholder="(ex. TUPM-22-1234)" required>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -217,7 +217,7 @@ include("../auth/session.php");
                                         </div>
                                         <div class="row mb-3">
                                             <label for="tup_id" class="form-label">TUP ID</label>
-                                            <input type="text"  id='update_tup_id' name="tup_id" class="form-control"  required>
+                                            <input type="text"  style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase()" id='update_tup_id' name="tup_id" class="form-control"  required>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="college" class="form-label">College</label>
@@ -538,19 +538,19 @@ include("../auth/session.php");
                     }
                 });
 
-                const formData = new FormData();
-                formData.append('image_release_preview', compressedFile);
+                // const formData = new FormData();
+                // formData.append('image_release_preview', compressedFile);
 
-                fetch('upload_image.php', {
-                    method: 'POST', 
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('image_release_preview').src = data.filePath;
-                    }
-                })
+                // fetch('upload_image.php', {
+                //     method: 'POST', 
+                //     body: formData
+                // })
+                // .then(response => response.json())
+                // .then(data => {
+                //     if (data.success) {
+                //         document.getElementById('image_release_preview').src = data.filePath;
+                //     }
+                // })
             // Create User
 
             // Edit User
