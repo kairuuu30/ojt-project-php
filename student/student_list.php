@@ -198,16 +198,17 @@ include("../auth/session.php");
                                     <span aria-hidden="true">×</span>
                                 </button>
                             </div> 
-                            <form action="../process/edit_user.php" method="POST" id="editUserValidation">
+                            <form action="../process/edit_user.php" method="POST" id="editUserValidation" enctype="multipart/form-data">
                                 <div class="modal-body">
                                     <div class = "container">
                                         <div class="row mb-3"> 
                                             <div class="profile-upload-wrapper mx-auto">
-                                                <img id="image_release_preview" src="<?php echo '../img/no_profile_picture.png'; ?>" alt="Profile" class="img-fluid">
+                                                <img id="edit_image_preview" src="<?php echo '../img/no_profile_picture.png'; ?>" alt="Profile" class="img-fluid">
                                                 <label for="imageReleaseUpload" class="edit-icon">
                                                     <i class="fas fa-pencil-alt" data-bs-toggle="tooltip" data-bs-placement="top" title="Upload Profile"></i>
                                                 </label>
-                                                <input type="file" name="upload_file" id="imageReleaseUpload" accept=".jpg, .jpeg, .png" required>
+                                                <input type="hidden" name="old_image" id="old_image">
+                                                <input type="file" name="upload_file" id="imageEditReleaseUpload" accept=".jpg, .jpeg, .png" required>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -569,17 +570,17 @@ include("../auth/session.php");
             // Create User
 
             // Edit User
-                document.getElementById('imageReleaseUpload').addEventListener('change', function() {
+                document.getElementById('imageEditReleaseUpload').addEventListener('change', function() {
                     const file = this.files[0];
                     if (!file) return;
 
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        document.getElementById('image_release_preview').src = e.target.result;
+                        document.getElementById('edit_image_preview').src = e.target.result;
                     };
                     reader.readAsDataURL(file);
                 });
-                
+
                 $('#fetching_data_table').on('click', '.edit_user', function(e) {
                     e.preventDefault();
                     var student_id = $(this).data('user_id');
@@ -607,6 +608,10 @@ include("../auth/session.php");
                             } else {
                                 $('#update_college').val(response.college_id).data('selected-course', response.course_id).trigger('change');
                             }
+
+                            const imagePath = response.image ? '../student/profiles/' + response.image : '../img/no_profile_picture.png';
+                            $('#edit_image_preview').attr('src', imagePath);
+                            $('#old_image').val(response.image);                            
 
                             $('#editModal').modal('show');
                         }
@@ -693,10 +698,15 @@ include("../auth/session.php");
                             $(element).removeClass('is-invalid');
                         },
                         submitHandler: function(form) {
+
+                            var formData = new FormData(form);
+
                             $.ajax({
                                 url: form.action,
                                 type: form.method,
-                                data: $(form).serialize(),
+                                data: formData,
+                                contentType: false, 
+                                processData: false,
                                 success: function(response) {
                                     if (typeof response === 'string') {
                                         var res = JSON.parse(response);
@@ -706,6 +716,15 @@ include("../auth/session.php");
 
                                     if (res.status === 'success') {
                                         $('#editModal').modal('hide');
+
+                                        var fileInput = $('#imageReleaseUpload')[0];
+                                        if (fileInput && fileInput.files && fileInput.files[0]) {
+                                            const reader = new FileReader();
+                                            reader.onload = function(e) {
+                                                $('#topbar_profile_img').attr('src', e.target.result);
+                                            };
+                                            reader.readAsDataURL(fileInput.files[0]);
+                                        }
                                         Swal.fire({
                                             title: 'Success!',
                                             text: res.message,
