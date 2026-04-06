@@ -20,6 +20,7 @@ if (isset($_POST['login'])) {
             ]);
     } else {
         $_SESSION["id"] = $row['id'];
+        $_SESSION["user_image"] = $row['image'];
         $_SESSION["username"] = $row['username'];
         $_SESSION["name"] = $row['name'];
         $_SESSION['is-user-logged'] = 1;

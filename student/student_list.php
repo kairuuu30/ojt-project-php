@@ -110,12 +110,11 @@ include("../auth/session.php");
                                     <span aria-hidden="true">×</span>
                                 </button>
                             </div>
-                            
-                            <form action="../process/create_user.php" method="POST" id="createUserValidation">
+                            <form action="../process/create_user.php" method="POST" id="createUserValidation" enctype="multipart/form-data">
                                 <div class="modal-body">
                                     <div class = "container">
                                         <div class="text-center mb-4">
-                                        <div class="fw-bold h5 text-primary text-uppercase mb-3 text-start">Profile Picture</div>
+                                        <div class="fw-bold h5 text-primary text-uppercase mb-3 text-center">Profile Picture</div>
                                             <div class="profile-upload-wrapper mx-auto">
                                                 <img id="image_release_preview" src="<?php echo '../img/no_profile_picture.png'; ?>" alt="Profile" class="img-fluid">
                                                 <label for="imageReleaseUpload" class="edit-icon">
@@ -202,6 +201,15 @@ include("../auth/session.php");
                             <form action="../process/edit_user.php" method="POST" id="editUserValidation">
                                 <div class="modal-body">
                                     <div class = "container">
+                                        <div class="row mb-3"> 
+                                            <div class="profile-upload-wrapper mx-auto">
+                                                <img id="image_release_preview" src="<?php echo '../img/no_profile_picture.png'; ?>" alt="Profile" class="img-fluid">
+                                                <label for="imageReleaseUpload" class="edit-icon">
+                                                    <i class="fas fa-pencil-alt" data-bs-toggle="tooltip" data-bs-placement="top" title="Upload Profile"></i>
+                                                </label>
+                                                <input type="file" name="upload_file" id="imageReleaseUpload" accept=".jpg, .jpeg, .png" required>
+                                            </div>
+                                        </div>
                                         <div class="row mb-3">
                                             <input type="hidden" id='update_id' name="id">
                                             <label for="name" class="form-label">Name</label>
@@ -337,12 +345,13 @@ include("../auth/session.php");
             // Create User
                 $('#createUserValidation').validate({
                     rules: {
+                        upload_file: {required: true,},
                         name: {required: true,},
                         bday: {required: true,}, 
                         phone: {required: true,},
                         tup_id: {required: true,},
-                        college: {required: true,},
-                        course: {required: true,}
+                        college_id: {required: true,},
+                        course_id: {required: true,}
                     },
                     errorElement: 'span',
                     errorPlacement: function(error, element) {
@@ -356,10 +365,16 @@ include("../auth/session.php");
                         $(element).removeClass('is-invalid');
                     },
                     submitHandler: function(form) {
+
+                        var formData = new FormData(form);
+
                         $.ajax({
                             url: form.action,
                             type: form.method,
-                            data: $(form).serialize(),
+                            data: formData,
+                            contentType: false,
+                            processData: false, 
+                            dataType: 'json',
                             success: function(response) {
                                 if (typeof response === 'string') {
                                     var res = JSON.parse(response);
@@ -554,6 +569,17 @@ include("../auth/session.php");
             // Create User
 
             // Edit User
+                document.getElementById('imageReleaseUpload').addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('image_release_preview').src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+                
                 $('#fetching_data_table').on('click', '.edit_user', function(e) {
                     e.preventDefault();
                     var student_id = $(this).data('user_id');
